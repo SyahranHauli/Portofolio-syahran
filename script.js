@@ -1,300 +1,364 @@
-/* =====================================================
-   PORTFOLIO SCRIPT
-   Author : Syahran Hauli
-===================================================== */
+/* ===========================================================
+   PORTFOLIO
+   Syahran Hauli Fadhillah
+=========================================================== */
 
-/* ==============================
-   AOS Animation
-============================== */
+document.addEventListener("DOMContentLoaded", () => {
 
-AOS.init({
-    duration: 1000,
-    once: true,
-    easing: "ease-in-out"
-});
+    /* ===========================================
+       AOS
+    =========================================== */
 
-/* ==============================
-   Typing Animation
-============================== */
+    AOS.init({
+        duration: 1000,
+        once: true,
+        easing: "ease-in-out"
+    });
 
-new Typed("#typing", {
-    strings: [
-        "Data Analyst",
-        "Machine Learning Enthusiast",
-        "Python Developer",
-        "SQL Developer",
-        "Data Visualization"
-    ],
-    typeSpeed: 70,
-    backSpeed: 45,
-    backDelay: 1500,
-    loop: true
-});
+    /* ===========================================
+       TYPING EFFECT
+    =========================================== */
 
-/* ==============================
-   Navbar Scroll Effect
-============================== */
+    new Typed("#typing", {
 
-const navbar = document.querySelector(".navbar");
+        strings: [
 
-window.addEventListener("scroll", () => {
+            "Data Analyst",
+            "Machine Learning Enthusiast",
+            "SQL Developer",
+            "Python Developer"
 
-    if (window.scrollY > 50) {
+        ],
 
-        navbar.style.background = "rgba(15,23,42,.95)";
-        navbar.style.boxShadow = "0 8px 20px rgba(0,0,0,.35)";
-        navbar.style.padding = "12px 0";
+        typeSpeed: 70,
+        backSpeed: 40,
+        backDelay: 1800,
+        loop: true
 
-    } else {
+    });
 
-        navbar.style.background = "rgba(15,23,42,.75)";
-        navbar.style.boxShadow = "none";
-        navbar.style.padding = "18px 0";
+    /* ===========================================
+       NAVBAR SCROLL
+    =========================================== */
 
-    }
+    const navbar = document.querySelector(".navbar");
 
-});
+    window.addEventListener("scroll", () => {
 
-/* ==============================
-   Active Menu
-============================== */
+        if(window.scrollY > 60){
 
-const sections = document.querySelectorAll("section");
-const navLinks = document.querySelectorAll(".nav-link");
+            navbar.style.padding = "12px 0";
+            navbar.style.background = "rgba(2,6,23,.95)";
+            navbar.style.boxShadow = "0 10px 30px rgba(0,0,0,.35)";
 
-window.addEventListener("scroll", () => {
+        }else{
 
-    let current = "";
+            navbar.style.padding = "20px 0";
+            navbar.style.background = "rgba(15,23,42,.75)";
+            navbar.style.boxShadow = "none";
 
-    sections.forEach(section => {
-
-        const sectionTop = section.offsetTop - 150;
-
-        if (window.scrollY >= sectionTop) {
-            current = section.getAttribute("id");
         }
 
     });
 
-    navLinks.forEach(link => {
+    /* ===========================================
+       ACTIVE NAVBAR
+    =========================================== */
 
-        link.classList.remove("active");
+    const sections = document.querySelectorAll("section");
+    const navLinks = document.querySelectorAll(".nav-link");
 
-        if (link.getAttribute("href") === "#" + current) {
-            link.classList.add("active");
-        }
+    window.addEventListener("scroll", () => {
 
-    });
+        let current = "";
 
-});
+        sections.forEach(section => {
 
-/* ==============================
-   Smooth Scroll
-============================== */
+            const top = section.offsetTop - 120;
+            const height = section.clientHeight;
 
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            if(pageYOffset >= top){
 
-    anchor.addEventListener("click", function (e) {
+                current = section.getAttribute("id");
 
-        e.preventDefault();
+            }
 
-        document.querySelector(this.getAttribute("href")).scrollIntoView({
-            behavior: "smooth"
+        });
+
+        navLinks.forEach(link=>{
+
+            link.classList.remove("active");
+
+            if(link.getAttribute("href") === "#" + current){
+
+                link.classList.add("active");
+
+            }
+
         });
 
     });
 
-});
+    /* ===========================================
+       SMOOTH SCROLL
+    =========================================== */
 
-/* ==============================
-   Scroll Progress Bar
-============================== */
+    document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
 
-const progressBars = document.querySelectorAll(".progress-bar");
+        anchor.addEventListener("click",function(e){
 
-const progressObserver = new IntersectionObserver((entries) => {
+            e.preventDefault();
 
-    entries.forEach(entry => {
+            document.querySelector(this.getAttribute("href"))
+            .scrollIntoView({
 
-        if (entry.isIntersecting) {
+                behavior:"smooth"
 
-            let width = entry.target.style.width;
+            });
 
-            entry.target.style.width = "0";
+        });
 
-            setTimeout(() => {
+    });
 
-                entry.target.style.transition = "1.5s";
-                entry.target.style.width = width;
+    /* ===========================================
+       FADE UP
+    =========================================== */
 
-            }, 300);
+    const revealElements = document.querySelectorAll(
+
+        ".project-card,.certificate-card,.skill-card,.info-card,.timeline-content,.education-card,.contact-card"
+
+    );
+
+    function reveal(){
+
+        revealElements.forEach(el=>{
+
+            const top = el.getBoundingClientRect().top;
+
+            if(top < window.innerHeight-100){
+
+                el.style.opacity="1";
+                el.style.transform="translateY(0)";
+
+            }
+
+        });
+
+    }
+
+    reveal();
+
+    window.addEventListener("scroll",reveal);
+
+    /* ===========================================
+       COUNTER
+    =========================================== */
+
+    const counters = document.querySelectorAll(".counter");
+
+    counters.forEach(counter=>{
+
+        counter.innerText="0";
+
+        const updateCounter=()=>{
+
+            const target=+counter.getAttribute("data-target");
+
+            const current=+counter.innerText;
+
+            const increment=target/80;
+
+            if(current<target){
+
+                counter.innerText=Math.ceil(current+increment);
+
+                setTimeout(updateCounter,20);
+
+            }
+
+            else{
+
+                counter.innerText=target;
+
+            }
 
         }
+
+        updateCounter();
+
+    });
+
+    /* ===========================================
+       PROGRESS BAR
+    =========================================== */
+
+    const bars=document.querySelectorAll(".progress-bar");
+
+    bars.forEach(bar=>{
+
+        const value=bar.style.width;
+
+        bar.style.width="0";
+
+        setTimeout(()=>{
+
+            bar.style.width=value;
+
+        },500);
+
+    });
+
+    /* ===========================================
+       IMAGE PARALLAX
+    =========================================== */
+
+    const heroImage=document.querySelector(".hero-image");
+
+    window.addEventListener("mousemove",(e)=>{
+
+        let x=(window.innerWidth/2-e.pageX)/40;
+
+        let y=(window.innerHeight/2-e.pageY)/40;
+
+        heroImage.style.transform=
+
+        `translate(${x}px,${y}px)`;
 
     });
 
 });
 
-progressBars.forEach(bar => {
+/* ===========================================
+   BACK TO TOP
+=========================================== */
 
-    progressObserver.observe(bar);
+const topButton=document.createElement("button");
 
-});
+topButton.innerHTML='<i class="fa-solid fa-arrow-up"></i>';
 
-/* ==============================
-   Reveal Project Cards
-============================== */
-
-const cards = document.querySelectorAll(".project-card");
-
-cards.forEach((card, index) => {
-
-    card.style.opacity = "0";
-    card.style.transform = "translateY(40px)";
-
-    setTimeout(() => {
-
-        card.style.transition = ".8s";
-
-    }, 200);
-
-});
-
-const cardObserver = new IntersectionObserver((entries) => {
-
-    entries.forEach(entry => {
-
-        if (entry.isIntersecting) {
-
-            entry.target.style.opacity = "1";
-            entry.target.style.transform = "translateY(0px)";
-
-        }
-
-    });
-
-}, {
-    threshold: 0.2
-});
-
-cards.forEach(card => {
-
-    cardObserver.observe(card);
-
-});
-
-/* ==============================
-   Hero Image Floating Animation
-============================== */
-
-const heroImage = document.querySelector(".hero-image");
-
-let direction = 1;
-
-setInterval(() => {
-
-    heroImage.style.transform = `translateY(${direction * 10}px)`;
-
-    direction *= -1;
-
-}, 2000);
-
-/* ==============================
-   Back To Top Button
-============================== */
-
-const topButton = document.createElement("button");
-
-topButton.innerHTML = '<i class="fas fa-arrow-up"></i>';
-
-topButton.id = "backToTop";
+topButton.className="top-button";
 
 document.body.appendChild(topButton);
 
-topButton.style.position = "fixed";
-topButton.style.right = "25px";
-topButton.style.bottom = "25px";
-topButton.style.width = "55px";
-topButton.style.height = "55px";
-topButton.style.border = "none";
-topButton.style.borderRadius = "50%";
-topButton.style.background = "#2563EB";
-topButton.style.color = "#fff";
-topButton.style.cursor = "pointer";
-topButton.style.display = "none";
-topButton.style.zIndex = "999";
-topButton.style.boxShadow = "0 10px 25px rgba(0,0,0,.3)";
-topButton.style.transition = ".3s";
+window.addEventListener("scroll",()=>{
 
-window.addEventListener("scroll", () => {
+    if(window.scrollY>500){
 
-    if (window.scrollY > 400) {
+        topButton.classList.add("show");
 
-        topButton.style.display = "block";
+    }
 
-    } else {
+    else{
 
-        topButton.style.display = "none";
+        topButton.classList.remove("show");
 
     }
 
 });
 
-topButton.addEventListener("click", () => {
+topButton.onclick=()=>{
 
     window.scrollTo({
 
-        top: 0,
+        top:0,
 
-        behavior: "smooth"
+        behavior:"smooth"
+
+    });
+
+}
+
+/* ===========================================
+   LOADING
+=========================================== */
+
+window.addEventListener("load",()=>{
+
+    document.body.classList.add("loaded");
+
+});
+
+/* ===========================================
+   PROJECT CARD EFFECT
+=========================================== */
+
+const cards=document.querySelectorAll(".project-card");
+
+cards.forEach(card=>{
+
+    card.addEventListener("mouseenter",()=>{
+
+        card.style.transform="translateY(-12px) scale(1.02)";
+
+    });
+
+    card.addEventListener("mouseleave",()=>{
+
+        card.style.transform="translateY(0px)";
 
     });
 
 });
 
-/* ==============================
-   Hover Glow Effect
-============================== */
+/* ===========================================
+   CERTIFICATE EFFECT
+=========================================== */
 
-document.querySelectorAll(".project-card").forEach(card => {
+document.querySelectorAll(".certificate-card").forEach(card=>{
 
-    card.addEventListener("mousemove", (e) => {
+    card.addEventListener("mouseenter",()=>{
 
-        const x = e.offsetX;
-        const y = e.offsetY;
-
-        card.style.background =
-            `radial-gradient(circle at ${x}px ${y}px,
-            rgba(59,130,246,.35),
-            #1E293B 60%)`;
+        card.style.boxShadow="0 25px 50px rgba(37,99,235,.35)";
 
     });
 
-    card.addEventListener("mouseleave", () => {
+    card.addEventListener("mouseleave",()=>{
 
-        card.style.background = "#1E293B";
+        card.style.boxShadow="";
 
     });
 
 });
 
-/* ==============================
-   Footer Year
-============================== */
+/* ===========================================
+   CONTACT EFFECT
+=========================================== */
 
-const footer = document.querySelector("footer p");
+document.querySelectorAll(".contact-card").forEach(card=>{
 
-const year = new Date().getFullYear();
+    card.addEventListener("mouseenter",()=>{
 
-footer.innerHTML =
-`© ${year} Syahran Hauli. All Rights Reserved.`;
+        card.style.transform="translateY(-10px)";
 
-/* ==============================
-   Console Message
-============================== */
+    });
 
-console.log("%cWelcome to Syahran's Portfolio",
-"color:#3B82F6;font-size:18px;font-weight:bold");
+    card.addEventListener("mouseleave",()=>{
 
-console.log("%cDesigned with HTML • CSS • JavaScript",
-"color:#94A3B8;font-size:14px");
+        card.style.transform="translateY(0px)";
+
+    });
+
+});
+
+/* ===========================================
+   COPYRIGHT YEAR
+=========================================== */
+
+const year=new Date().getFullYear();
+
+const footer=document.querySelector("footer p");
+
+if(footer){
+
+    footer.innerHTML=`© ${year} Syahran Hauli Fadhillah. All Rights Reserved.`;
+
+}
+
+console.log(
+
+"%cPortfolio Loaded Successfully",
+
+"color:#3b82f6;font-size:18px;font-weight:bold"
+
+);
